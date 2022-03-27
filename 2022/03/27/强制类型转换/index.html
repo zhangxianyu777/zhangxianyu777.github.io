@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+  <meta name="generator" content="Hexo 6.1.0">
+  <meta charset="utf-8">
+  
+
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  <link rel='dns-prefetch' href='https://cdn.jsdelivr.net'>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel='dns-prefetch' href='//unpkg.com'>
+
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" content="#f8f8f8">
+  <title>C++ 强制类型转换 - zmx'blog</title>
+
+  
+
+  
+    <meta name="description" content="C++中强制类型转换的四种函数:静态转换(static_cast)、动态转换(dynamic_cast)、常量转换(const_cast)、重新解释转换(reinterpret_cast)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++ 强制类型转换">
+<meta property="og:url" content="http://example.com/2022/03/27/%E5%BC%BA%E5%88%B6%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/index.html">
+<meta property="og:site_name" content="zmx&#39;blog">
+<meta property="og:description" content="C++中强制类型转换的四种函数:静态转换(static_cast)、动态转换(dynamic_cast)、常量转换(const_cast)、重新解释转换(reinterpret_cast)">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-03-27T06:11:14.875Z">
+<meta property="article:modified_time" content="2022-03-27T06:13:35.321Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+  
+  
+
+  <!-- feed -->
+  
+
+  
+    
+<link rel="stylesheet" href="/css/main.css">
+
+  
+
+  
+
+  
+</head>
+
+<body>
+  
+
+
+
+
+  <div class='l_body' id='start'>
+    <aside class='l_left' layout='post'>
+    
+
+
+<header class="header">
+
+<div class="logo-wrap"><a class="title" href="/"><div class="main">zmx'blog</div></a></div>
+<nav class="menu dis-select"></nav></header>
+
+<div class="widgets">
+
+<div class="widget-wrap single" id="toc"><div class="widget-header cap dis-select"><span class="name">TOC</span></div><div class="widget-body fs14"><div class="doc-tree active"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%BA%E5%88%B6%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2"><span class="toc-text">强制类型转换</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9D%99%E6%80%81%E8%BD%AC%E6%8D%A2-static-cast"><span class="toc-text">静态转换(static_cast)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%94%A8%E4%BA%8E%E5%9F%BA%E7%A1%80%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2"><span class="toc-text">用于基础类型转换</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%B1%BB%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84%E4%B8%AD%E5%9F%BA%E7%B1%BB%E5%92%8C%E6%B4%BE%E7%94%9F%E7%B1%BB%E4%B9%8B%E9%97%B4%E6%8C%87%E9%92%88%E6%88%96%E5%BC%95%E7%94%A8%E7%9A%84%E8%BD%AC%E6%8D%A2"><span class="toc-text">类层次结构中基类和派生类之间指针或引用的转换</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%8C%87%E9%92%88%E8%BD%AC%E6%8D%A2"><span class="toc-text">指针转换</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%BC%95%E7%94%A8%E8%BD%AC%E6%8D%A2"><span class="toc-text">引用转换</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%A8%E6%80%81%E8%BD%AC%E6%8D%A2-dynamic-cast"><span class="toc-text">动态转换(dynamic_cast)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E7%B1%BB%E5%9E%8B%E4%B8%8D%E8%83%BD%E4%BD%BF%E7%94%A8%E5%8A%A8%E6%80%81%E8%BD%AC%E6%8D%A2"><span class="toc-text">基础类型不能使用动态转换</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%94%A8%E4%BA%8E%E7%B1%BB%E5%B1%82%E6%AC%A1%E9%97%B4%E4%B8%8A%E8%A1%8C%E8%BD%AC%E6%8D%A2%E5%92%8C%E4%B8%8B%E8%A1%8C%E8%BD%AC%E6%8D%A2"><span class="toc-text">用于类层次间上行转换和下行转换</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%A4%9A%E6%80%81%E5%90%8E%E5%8F%AF%E4%BB%A5%E5%90%91%E4%B8%8B%E8%BD%AC%E6%8D%A2%EF%BC%88%E5%9F%BA%E7%B1%BB%E4%B8%AD%E8%A6%81%E6%9C%89%E8%99%9A%E5%87%BD%E6%95%B0%EF%BC%89"><span class="toc-text">多态后可以向下转换（基类中要有虚函数）</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E9%87%8F%E8%BD%AC%E6%8D%A2-const-cast"><span class="toc-text">常量转换(const_cast)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%87%8D%E6%96%B0%E8%A7%A3%E9%87%8A%E8%BD%AC%E6%8D%A2-reinterpret-cast"><span class="toc-text">重新解释转换(reinterpret_cast)</span></a></li></ol></li></ol></div></div></div>
+
+
+</div>
+
+
+    </aside>
+    <div class='l_main'>
+      
+
+      
+
+<div class="bread-nav fs12"><div id="breadcrumb"><a class="cap breadcrumb" href="/">Home</a><span class="sep"></span><a class="cap breadcrumb" href="/">Blog</a></div><div id="post-meta">Posted on&nbsp;<time datetime="2022-03-27T06:11:14.875Z">2022-03-27</time></div></div>
+
+<article class='content md post'>
+<h1 class="article-title"><span>C++ 强制类型转换</span></h1>
+<p>C++中强制类型转换的四种函数:静态转换(static_cast)、动态转换(dynamic_cast)、常量转换(const_cast)、重新解释转换(reinterpret_cast)</p>
+<span id="more"></span>
+<h2 id="强制类型转换"><a href="#强制类型转换" class="headerlink" title="强制类型转换"></a>强制类型转换</h2><p>静态转换(static_cast)</p>
+<p>动态转换(dynamic_cast)</p>
+<p>常量转换(const_cast)</p>
+<p>重新解释转换(reinterpret_cast)</p>
+<hr>
+<h3 id="静态转换-static-cast"><a href="#静态转换-static-cast" class="headerlink" title="静态转换(static_cast)"></a>静态转换(static_cast)</h3><h4 id="用于基础类型转换"><a href="#用于基础类型转换" class="headerlink" title="用于基础类型转换"></a>用于基础类型转换</h4><pre><code>如把int转换成char。这种转换的安全也要开发人员来保证
+</code></pre>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">char a = &#x27;a&#x27;;</span><br><span class="line">double d = static_cast&lt;double&gt;(a); //char-&gt;double</span><br></pre></td></tr></table></figure>
+
+<h4 id="类层次结构中基类和派生类之间指针或引用的转换"><a href="#类层次结构中基类和派生类之间指针或引用的转换" class="headerlink" title="类层次结构中基类和派生类之间指针或引用的转换"></a>类层次结构中基类和派生类之间指针或引用的转换</h4><pre><code>进行上行转换(把派生类的指针或引用转换成基类表示)是安全的
+
+进行下行转换(把基类的指针或引用转换成派生类表示)，由于没有动态类型检查，是不安全的
+</code></pre>
+<h5 id="指针转换"><a href="#指针转换" class="headerlink" title="指针转换"></a>指针转换</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">//father 为基类 son 为派生类</span><br><span class="line">father *f = NULL;</span><br><span class="line">son *s = NULL;</span><br><span class="line">son *s1 = static_cast&lt;son *&gt;(f);//向下转换 不安全</span><br><span class="line">father *f1 = static_cast&lt;father *&gt;(s);//向上转换，安全</span><br><span class="line">//没有亲属关系不能转换</span><br><span class="line">//other *o = static_cast&lt;other&gt;(s);</span><br></pre></td></tr></table></figure>
+
+<h5 id="引用转换"><a href="#引用转换" class="headerlink" title="引用转换"></a>引用转换</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">father f;</span><br><span class="line">son s;</span><br><span class="line">father &amp;ref_f = f;</span><br><span class="line">son &amp;ref_s = s;</span><br><span class="line">static_cast&lt;father &amp;&gt;(ref_s);//向上</span><br><span class="line">static_cast&lt;son &amp;&gt;(ref_f);//向下</span><br></pre></td></tr></table></figure>
+
+<p>还可以：</p>
+<pre><code>把空指针转换成目标类型的空指针
+
+把任何类型的表达式转换为void类型
+</code></pre>
+<p>但不可以：</p>
+<pre><code>static_cast不能转换掉expression的const、volitale或者__unaligned属性
+</code></pre>
+<p>特点：</p>
+<pre><code>可以实现C++中内置基本数据类型之间的相互转换
+
+只能在有相互联系的类型中进行相互转换
+</code></pre>
+<hr>
+<h3 id="动态转换-dynamic-cast"><a href="#动态转换-dynamic-cast" class="headerlink" title="动态转换(dynamic_cast)"></a>动态转换(dynamic_cast)</h3><h4 id="基础类型不能使用动态转换"><a href="#基础类型不能使用动态转换" class="headerlink" title="基础类型不能使用动态转换"></a>基础类型不能使用动态转换</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">//char a = &#x27;a&#x27;;</span><br><span class="line">//dynamic_cast&lt;double&gt;(a); 基础类型不能使用动态转换</span><br></pre></td></tr></table></figure>
+
+<h4 id="用于类层次间上行转换和下行转换"><a href="#用于类层次间上行转换和下行转换" class="headerlink" title="用于类层次间上行转换和下行转换"></a>用于类层次间上行转换和下行转换</h4><pre><code>上行转换时，dynamic_cast和static_cast效果一样
+
+下行转换时，dynamic_cast具有类型检查的功能，比static_cast安全
+</code></pre>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">father *f = NULL;</span><br><span class="line">son *s = NULL;</span><br><span class="line">father *f1 = dynamic_cast&lt;father *&gt;(s);</span><br><span class="line">//son *s1 = dynamic_cast&lt;son *&gt;(f); 向下不安全 检查 不通过编译</span><br></pre></td></tr></table></figure>
+
+<h5 id="多态后可以向下转换（基类中要有虚函数）"><a href="#多态后可以向下转换（基类中要有虚函数）" class="headerlink" title="多态后可以向下转换（基类中要有虚函数）"></a>多态后可以向下转换（基类中要有虚函数）</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">class father2</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    virtual void func();</span><br><span class="line">&#125;;</span><br><span class="line">class son2 : public father2</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    virtual void func();</span><br><span class="line">&#125;;</span><br><span class="line">//发生多态时，向下转换</span><br><span class="line">void test()</span><br><span class="line">&#123;</span><br><span class="line">    father2 *f = new son2;</span><br><span class="line">    dynamic_cast&lt;son2 *&gt;(f);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="常量转换-const-cast"><a href="#常量转换-const-cast" class="headerlink" title="常量转换(const_cast)"></a>常量转换(const_cast)</h3><p>去除常量性的对象必须为指针或引用。</p>
+<p>常量指针&#x2F;引用被转换成非常量指针&#x2F;引用，并且仍然指向原来的对象</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">const int *p = NULL;</span><br><span class="line">int *newp = const_cast&lt;int *&gt;(p); //const int* -&gt;int *</span><br><span class="line">int *pp = NULL;</span><br><span class="line">const int *newpp = const_cast&lt;const int *&gt;(pp); //int* -&gt;const  int *</span><br></pre></td></tr></table></figure>
+
+<p>不能对非指针和非引用的变量使用去除其const</p>
+<hr>
+<h3 id="重新解释转换-reinterpret-cast"><a href="#重新解释转换-reinterpret-cast" class="headerlink" title="重新解释转换(reinterpret_cast)"></a>重新解释转换(reinterpret_cast)</h3><p>使用reinterpret_cast强制转换过程仅仅只是比特位的拷贝，因此在使用过程中需要特别谨慎，不安全</p>
+<p>改变指针或引用的类型、将指针或引用转换为一个足够长度的整形、将整型转换为指针或引用类型。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">int a = 10;</span><br><span class="line">int *p = reinterpret_cast&lt;int *&gt;(a); //整数-&gt;指针</span><br><span class="line">father *f = NULL;</span><br><span class="line">other *o = reinterpret_cast&lt;other *&gt;(f); //father-&gt;other</span><br></pre></td></tr></table></figure>
+
+
+<div class="article-footer reveal fs14"><section id="license"><div class="header"><span>License</span></div><div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
+</div></section></div>
+
+</article>
+
+<div class="related-wrap reveal" id="read-next"><section class="header cap theme"><span>READ NEXT</span></section><section class="body fs14"><a id="next" href="/2022/03/27/CSS%20box/">CSS盒子模型<span class="note">Older</span></a><div class="line"></div></section></div>
+
+
+
+
+
+
+
+
+      
+<footer class="page-footer reveal fs12"><hr><div class="text"><p>All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</p>
+<p>This site was deployed by <a href="http://example.com/">@John Doe</a> using <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.6.1" title="v1.6.1">Stellar</a>.</p>
+</div></footer>
+
+      <div class='float-panel mobile-only blur' style='display:none'>
+  <button type='button' class='sidebar-toggle mobile' onclick='sidebar.toggle()'>
+    <svg class="icon" style="width: 1em; height: 1em;vertical-align: middle;fill: currentColor;overflow: hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="15301"><path d="M566.407 808.3c26.9-0.1 49.3-20.8 51.6-47.6-1.9-27.7-23.9-49.7-51.6-51.6h-412.6c-28.2-1.4-52.6 19.5-55.5 47.6 2.3 26.8 24.6 47.5 51.6 47.6h416.5v4z m309.3-249.9c26.9-0.1 49.3-20.8 51.6-47.6-2.2-26.8-24.6-47.5-51.6-47.6h-721.9c-27.7-2.8-52.5 17.4-55.3 45.1-0.1 0.8-0.1 1.7-0.2 2.5 0.9 27.2 23.6 48.5 50.7 47.6H875.707z m-103.1-245.9c26.9-0.1 49.3-20.8 51.6-47.6-0.4-28.3-23.2-51.1-51.5-51.6h-618.9c-29.5-1.1-54.3 21.9-55.5 51.4v0.2c1.4 27.8 25.2 49.2 53 47.8 0.8 0 1.7-0.1 2.5-0.2h618.8z" p-id="15302"></path><path d="M566.407 808.3c26.9-0.1 49.3-20.8 51.6-47.6-1.9-27.7-23.9-49.7-51.6-51.6h-412.6c-28.2-1.4-52.6 19.5-55.5 47.6 1.9 27.7 23.9 49.7 51.6 51.6h416.5z m309.3-249.9c26.9-0.1 49.3-20.8 51.6-47.6-2.2-26.8-24.6-47.5-51.6-47.6h-721.9c-27.7-2.8-52.5 17.4-55.3 45.1-0.1 0.8-0.1 1.7-0.2 2.5 0.9 27.2 23.6 48.5 50.7 47.6H875.707z m-103.1-245.9c26.9-0.1 49.3-20.8 51.6-47.6-0.4-28.3-23.2-51.1-51.5-51.6h-618.9c-29.5-1.1-54.3 21.9-55.5 51.4v0.2c1.4 27.8 25.2 49.2 53 47.8 0.8 0 1.7-0.1 2.5-0.2h618.8z" p-id="15303"></path></svg>
+  </button>
+</div>
+
+    </div>
+  </div>
+  <div class='scripts'>
+    <script type="text/javascript">
+  stellar = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    loadCSS: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    // 从 butterfly 和 volantis 获得灵感
+    loadScript: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    // https://github.com/jerryc127/hexo-theme-butterfly
+    jQuery: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        stellar.loadScript(stellar.plugins.jQuery).then(fn)
+      } else {
+        fn()
+      }
+    }
+  };
+  stellar.github = 'https://github.com/xaoxuu/hexo-theme-stellar/tree/1.6.1';
+  stellar.config = {
+    date_suffix: {
+      just: 'Just',
+      min: 'minutes ago',
+      hour: 'hours ago',
+      day: 'days ago',
+      month: 'months ago',
+    },
+  };
+
+  // required plugins (only load if needs)
+  stellar.plugins = {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js',
+    sitesjs: '/js/plugins/sites.js',
+    friendsjs: '/js/plugins/friends.js',
+  };
+
+  // optional plugins
+  if ('true' == 'true') {
+    stellar.plugins.lazyload = Object.assign({"enable":true,"js":"https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.3.1/dist/lazyload.min.js","transition":"blur"});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.swiper = Object.assign({"enable":true,"css":"https://unpkg.com/swiper@6/swiper-bundle.min.css","js":"https://unpkg.com/swiper@6/swiper-bundle.min.js"});
+  }
+  if ('' == 'true') {
+    stellar.plugins.scrollreveal = Object.assign({"enable":null,"js":"https://cdn.jsdelivr.net/npm/scrollreveal@4.0.9/dist/scrollreveal.min.js","distance":"8px","duration":500,"interval":100,"scale":1});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.preload = Object.assign({"enable":true,"service":"flying_pages","instant_page":"https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@4.1.2/js/instant_page.js","flying_pages":"https://cdn.jsdelivr.net/gh/gijo-varghese/flying-pages@2.1.2/flying-pages.min.js"});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.fancybox = Object.assign({"enable":true,"js":"https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.umd.js","css":"https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.css","selector":".swiper-slide img"});
+  }
+  if ('false' == 'true') {
+    stellar.plugins.heti = Object.assign({"enable":false,"css":"https://unpkg.com/heti/umd/heti.min.css","js":"https://unpkg.com/heti/umd/heti-addon.min.js"});
+  }
+</script>
+
+<!-- required -->
+
+  
+<script src="/js/main.js" async></script>
+
+
+
+<!-- optional -->
+
+
+
+<!-- inject -->
+
+
+  </div>
+</body>
+</html>
