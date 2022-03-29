@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+  <meta name="generator" content="Hexo 6.1.0">
+  <meta charset="utf-8">
+  
+
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  <link rel='dns-prefetch' href='https://cdn.jsdelivr.net'>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel='dns-prefetch' href='//unpkg.com'>
+
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" content="#f8f8f8">
+  <title>C++ 异常处理 - zmx'blog</title>
+
+  
+
+  
+    <meta name="description" content="C++中异常处理，包括异常的作用、基本语法、执行流程、严格类型匹配、接口声明、栈解旋、声明周期、多态以及系统提供的标准异常 01.异常基本概念异常处理就是处理程序中的错误。所谓错误是指在程序运行的过程中发生的一些异常事件 如除数为0 数组下标越界 索要读取文件不存在，内存不足等 02.异常的作用&#x2F;&#x2F;C语言处理异常的方法的缺陷：&#x2F;&#x2F;1.返回值意思不明确&amp;#x2">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++ 异常处理">
+<meta property="og:url" content="http://example.com/2022/03/29/%E5%BC%82%E5%B8%B8/index.html">
+<meta property="og:site_name" content="zmx&#39;blog">
+<meta property="og:description" content="C++中异常处理，包括异常的作用、基本语法、执行流程、严格类型匹配、接口声明、栈解旋、声明周期、多态以及系统提供的标准异常 01.异常基本概念异常处理就是处理程序中的错误。所谓错误是指在程序运行的过程中发生的一些异常事件 如除数为0 数组下标越界 索要读取文件不存在，内存不足等 02.异常的作用&#x2F;&#x2F;C语言处理异常的方法的缺陷：&#x2F;&#x2F;1.返回值意思不明确&amp;#x2">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-03-28T16:26:44.681Z">
+<meta property="article:modified_time" content="2022-03-28T16:29:17.452Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+  
+  
+
+  <!-- feed -->
+  
+
+  
+    
+<link rel="stylesheet" href="/css/main.css">
+
+  
+
+  
+
+  
+</head>
+
+<body>
+  
+
+
+
+
+  <div class='l_body' id='start'>
+    <aside class='l_left' layout='post'>
+    
+
+
+<header class="header">
+
+<div class="logo-wrap"><a class="title" href="/"><div class="main">zmx'blog</div></a></div>
+<nav class="menu dis-select"></nav></header>
+
+<div class="widgets">
+
+<div class="widget-wrap single" id="toc"><div class="widget-header cap dis-select"><span class="name">TOC</span></div><div class="widget-body fs14"><div class="doc-tree active"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#01-%E5%BC%82%E5%B8%B8%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-text">01.异常基本概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#02-%E5%BC%82%E5%B8%B8%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="toc-text">02.异常的作用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#03-%E5%BC%82%E5%B8%B8%E7%9A%84%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95"><span class="toc-text">03.异常的基本语法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#04-%E5%BC%82%E5%B8%B8%E4%BB%A3%E7%A0%81%E7%9A%84%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B"><span class="toc-text">04.异常代码的执行流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#05-%E5%BC%82%E5%B8%B8%E7%9A%84%E4%BC%98%E5%8A%BF"><span class="toc-text">05.异常的优势</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#06-%E5%BC%82%E5%B8%B8%E7%9A%84%E4%B8%A5%E6%A0%BC%E7%B1%BB%E5%9E%8B%E5%8C%B9%E9%85%8D"><span class="toc-text">06.异常的严格类型匹配</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#07-%E5%BC%82%E5%B8%B8%E7%9A%84%E6%8E%A5%E5%8F%A3%E5%A3%B0%E6%98%8E"><span class="toc-text">07.异常的接口声明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#08-%E6%A0%88%E8%A7%A3%E6%97%8B"><span class="toc-text">08.栈解旋</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-%E5%BC%82%E5%B8%B8%E5%8F%98%E9%87%8F%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="toc-text">9.异常变量的生命周期</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-%E5%BC%82%E5%B8%B8%E7%9A%84%E5%A4%9A%E6%80%81"><span class="toc-text">10.异常的多态</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-%E7%B3%BB%E7%BB%9F%E6%8F%90%E4%BE%9B%E7%9A%84%E6%A0%87%E5%87%86%E5%BC%82%E5%B8%B8"><span class="toc-text">11.系统提供的标准异常</span></a></li></ol></div></div></div>
+
+
+</div>
+
+
+    </aside>
+    <div class='l_main'>
+      
+
+      
+
+<div class="bread-nav fs12"><div id="breadcrumb"><a class="cap breadcrumb" href="/">Home</a><span class="sep"></span><a class="cap breadcrumb" href="/">Blog</a></div><div id="post-meta">Posted on&nbsp;<time datetime="2022-03-28T16:26:44.681Z">2022-03-29</time></div></div>
+
+<article class='content md post'>
+<h1 class="article-title"><span>C++ 异常处理</span></h1>
+<p>C++中异常处理，包括异常的作用、基本语法、执行流程、严格类型匹配、接口声明、栈解旋、声明周期、多态以及系统提供的标准异常</p>
+<h2 id="01-异常基本概念"><a href="#01-异常基本概念" class="headerlink" title="01.异常基本概念"></a>01.异常基本概念</h2><p><strong>异常处理就是处理程序中的错误。所谓错误是指在程序运行的过程中发生的一些异常事件</strong></p>
+<p>如除数为0 数组下标越界 索要读取文件不存在，内存不足等</p>
+<h2 id="02-异常的作用"><a href="#02-异常的作用" class="headerlink" title="02.异常的作用"></a>02.异常的作用</h2><p>&#x2F;&#x2F;C语言处理异常的方法的缺陷：<br>&#x2F;&#x2F;1.返回值意思不明确<br>&#x2F;&#x2F;2.返回值只能返回一条信息<br>&#x2F;&#x2F;3.返回值可以忽略</p>
+<p>C++的异常可以解决上面的问题</p>
+<h2 id="03-异常的基本语法"><a href="#03-异常的基本语法" class="headerlink" title="03.异常的基本语法"></a>03.异常的基本语法</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">int func(int a, int b)</span><br><span class="line">&#123;</span><br><span class="line">    if (b == 0)</span><br><span class="line">    &#123;</span><br><span class="line">        //2.抛出异常</span><br><span class="line">        throw 10;//抛出一个int类型的异常，</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return a / b;</span><br><span class="line">&#125;</span><br><span class="line">void test()</span><br><span class="line">&#123;</span><br><span class="line">    int a = 10;</span><br><span class="line">    int b = 0;</span><br><span class="line">    //1.把有可能出现异常的代码块放到try中</span><br><span class="line">    try</span><br><span class="line">    &#123;</span><br><span class="line">        func(a, b);</span><br><span class="line">    &#125;</span><br><span class="line">    catch (int)//3.接收一个int类型的异常</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;接收一个int类型的异常&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="04-异常代码的执行流程"><a href="#04-异常代码的执行流程" class="headerlink" title="04.异常代码的执行流程"></a>04.异常代码的执行流程</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">#define _CRT_SECURE_NO_WARNINGS</span><br><span class="line">#include&lt;iostream&gt;</span><br><span class="line">using namespace std;</span><br><span class="line"></span><br><span class="line">int func(int a, int b)</span><br><span class="line">&#123;</span><br><span class="line">    if (b == 0)</span><br><span class="line">    &#123;</span><br><span class="line">        //第二步：</span><br><span class="line">        throw 10;//抛出一个int类型的异常，</span><br><span class="line">        cout &lt;&lt; &quot;throw后的代码&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return a / b;</span><br><span class="line">&#125;</span><br><span class="line">void test()</span><br><span class="line">&#123;</span><br><span class="line">    int a = 10;</span><br><span class="line">    int b = 0;</span><br><span class="line">    </span><br><span class="line">    try</span><br><span class="line">    &#123;</span><br><span class="line">        func(a, b);//第一步：</span><br><span class="line">        cout &lt;&lt; &quot;func后的代码&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">    catch (int)//第三步：</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;接收一个int类型的异常&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">    test();</span><br><span class="line">    system(&quot;pause&quot;);</span><br><span class="line">    return EXIT_SUCCESS;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="05-异常的优势"><a href="#05-异常的优势" class="headerlink" title="05.异常的优势"></a>05.异常的优势</h2><p>1.用户不知道返回值是什么意思，异常可以抛出对象，对象中可以包含很多成员函数，可以有很信息</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">class Maker</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    void printMaker()</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;除数不能为0&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">int func(int a, int b)</span><br><span class="line">&#123;</span><br><span class="line">    if (b == 0)</span><br><span class="line">    &#123;</span><br><span class="line">        Maker m;</span><br><span class="line">        throw m;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return a / b;</span><br><span class="line">&#125;</span><br><span class="line">void test()</span><br><span class="line">&#123;</span><br><span class="line">    int a = 10;</span><br><span class="line">    int b = 0;</span><br><span class="line"></span><br><span class="line">    try</span><br><span class="line">    &#123;</span><br><span class="line">        func(a, b);</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">    catch (int)</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;接收一个int类型的异常&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">    catch (Maker maker)</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;接收一个Maker类型的异常&quot; &lt;&lt; endl;</span><br><span class="line">        maker.printMaker();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>2.返回值用户可以忽略，但异常不能忽略，如果忽略给你报错</p>
+<p>3.返回值只能返回一条信息，但是对象有成员函数，可以包含多个信息</p>
+<p>4.逐层依赖处理异常</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line">int func(int a, int b)</span><br><span class="line">&#123;</span><br><span class="line">    if (b == 0)</span><br><span class="line">    &#123;</span><br><span class="line">        //Maker m;</span><br><span class="line">        //throw m;//抛出一个Maker类型的异常</span><br><span class="line">        throw 20.22;//抛出一个double类型的异常</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return a / b;</span><br><span class="line">&#125;</span><br><span class="line">void test()</span><br><span class="line">&#123;</span><br><span class="line">    int a = 10;</span><br><span class="line">    int b = 0;</span><br><span class="line"></span><br><span class="line">    try</span><br><span class="line">    &#123;</span><br><span class="line">        func(a, b);</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">    catch (int)</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;接收一个int类型的异常&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">    catch (Maker maker)</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;接收一个Maker类型的异常&quot; &lt;&lt; endl;</span><br><span class="line">        maker.printMaker();</span><br><span class="line">    &#125;</span><br><span class="line">    catch (double s)</span><br><span class="line">    &#123;</span><br><span class="line">        //不想处理异常，可以往上抛出，抛给调用本函数的函数</span><br><span class="line">        throw;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">    try</span><br><span class="line">    &#123;</span><br><span class="line">        test();</span><br><span class="line">    &#125;</span><br><span class="line">    catch (double d)</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;接收一个double类型的异常&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    system(&quot;pause&quot;);</span><br><span class="line">    return EXIT_SUCCESS;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="06-异常的严格类型匹配"><a href="#06-异常的严格类型匹配" class="headerlink" title="06.异常的严格类型匹配"></a>06.异常的严格类型匹配</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">int func(int a, int b)</span><br><span class="line">&#123;</span><br><span class="line">    if (b == 0)</span><br><span class="line">    &#123;</span><br><span class="line">        //Maker m;</span><br><span class="line">        //throw m;//抛出一个Maker类型的异常</span><br><span class="line">        //throw 20.22;//抛出一个double类型的异常</span><br><span class="line">        //throw &#x27;c&#x27;;</span><br><span class="line">        throw 20.0f;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return a / b;</span><br><span class="line">&#125;</span><br><span class="line">void test()</span><br><span class="line">&#123;</span><br><span class="line">    int a = 10;</span><br><span class="line">    int b = 0;</span><br><span class="line"></span><br><span class="line">    try</span><br><span class="line">    &#123;</span><br><span class="line">        func(a, b);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    catch (int)</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;接收一个int类型的异常&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">    catch (double s)</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;接收一个double类型的异常&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">    catch (char)</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;接收一个char类型的异常&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">    catch (...)//接收其他类型的异常</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;接收一个其他类型的异常&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="07-异常的接口声明"><a href="#07-异常的接口声明" class="headerlink" title="07.异常的接口声明"></a>07.异常的接口声明</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">void func() throw(int,char) //只允许抛出 int 或者 char异常</span><br><span class="line">&#123;</span><br><span class="line">    throw 10; //抛出一个double类型的异常，QT上程序会档</span><br><span class="line">&#125;</span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">        try</span><br><span class="line">        &#123;</span><br><span class="line">            func();</span><br><span class="line">        &#125;</span><br><span class="line">        catch(int)</span><br><span class="line">        &#123;</span><br><span class="line"></span><br><span class="line">            cout &lt;&lt; &quot;int&quot;;</span><br><span class="line">        &#125;</span><br><span class="line">        catch(...)</span><br><span class="line">        &#123;</span><br><span class="line">            cout &lt;&lt; &quot;.....&quot;;</span><br><span class="line">        &#125;</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="08-栈解旋"><a href="#08-栈解旋" class="headerlink" title="08.栈解旋"></a>08.栈解旋</h2><p>1在抛出异常的函数中，如果抛出异常之后，但函数没有结束，这时，栈上申请的对象都会被释放这就叫栈解旋</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">class Maker</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    Maker()</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;Maker的构造&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">    Maker(const Maker &amp;m)</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;Maker的拷贝构造&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">    ~Maker()</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;Maker的析构&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">void func()</span><br><span class="line">&#123;</span><br><span class="line">    //在抛出异常的函数中，如果抛出异常之后，但函数没有结束，这时，栈上申请的对象都会被释放</span><br><span class="line">    //这就叫栈解旋</span><br><span class="line">    Maker m;</span><br><span class="line">    throw m;//这个m是Maker m拷贝一份的</span><br><span class="line"></span><br><span class="line">    cout &lt;&lt; &quot;func函数结束&quot; &lt;&lt; endl;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void test()</span><br><span class="line">&#123;</span><br><span class="line">    try</span><br><span class="line">    &#123;</span><br><span class="line">        func();</span><br><span class="line">        cout &lt;&lt; &quot;func()代码后&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">    catch (Maker)</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;接收一个Maker类型的异常&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="9-异常变量的生命周期"><a href="#9-异常变量的生命周期" class="headerlink" title="9.异常变量的生命周期"></a>9.异常变量的生命周期</h2><p>1.产生三个对象</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">class Maker</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    Maker()</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;Maker的构造&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">    Maker(const Maker &amp;m)</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;Maker的拷贝构造&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">    ~Maker()</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;Maker的析构&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line">//产生三个对象</span><br><span class="line">void func1()</span><br><span class="line">&#123;</span><br><span class="line">    Maker m;//第一个对象，在异常接收前被释放</span><br><span class="line">    throw m;//第二个对象，是第一个对象拷贝过来的</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void test01()</span><br><span class="line">&#123;</span><br><span class="line">    try</span><br><span class="line">    &#123;</span><br><span class="line">        func1();</span><br><span class="line">    &#125;</span><br><span class="line">    catch (Maker m1)//第三个对象，是第二个对象拷贝过来的</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;接收一个Maker类型的异常&quot; &lt;&lt; endl;</span><br><span class="line">        //第二个和第三个对象在catch结束时释放</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>2.产生二个对象</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">void func2()</span><br><span class="line">&#123;</span><br><span class="line">    //第一个对象</span><br><span class="line">    throw Maker();//匿名对象</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void test02()</span><br><span class="line">&#123;</span><br><span class="line">    try</span><br><span class="line">    &#123;</span><br><span class="line">        func2();</span><br><span class="line">    &#125;</span><br><span class="line">    catch (Maker m1)//第二个对象</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;接收一个Maker类型的异常&quot; &lt;&lt; endl;</span><br><span class="line">        //第一个和第二个对象在catch结束时释放</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>3.产生一个对象（常用这个）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">void func3()</span><br><span class="line">&#123;</span><br><span class="line">    throw Maker();//匿名对象</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void test03()</span><br><span class="line">&#123;</span><br><span class="line">    try</span><br><span class="line">    &#123;</span><br><span class="line">        func3();</span><br><span class="line">    &#125;</span><br><span class="line">    catch (Maker &amp;m1)</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;接收一个Maker类型的异常&quot; &lt;&lt; endl;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>4.注意：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">void func4()</span><br><span class="line">&#123;</span><br><span class="line">    //编译器不允许对栈中的匿名对象取地址操作</span><br><span class="line">    //throw Maker();//匿名对象</span><br><span class="line">    //编译器允许对堆区中的匿名对象取地址操作</span><br><span class="line">    throw new Maker();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void test04()</span><br><span class="line">&#123;</span><br><span class="line">    try</span><br><span class="line">    &#123;</span><br><span class="line">        func4();</span><br><span class="line">    &#125;</span><br><span class="line">    catch (Maker *m1)</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;接收一个Maker类型的异常&quot; &lt;&lt; endl;</span><br><span class="line"></span><br><span class="line">        delete m1;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="10-异常的多态"><a href="#10-异常的多态" class="headerlink" title="10.异常的多态"></a>10.异常的多态</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line">//异常的基类</span><br><span class="line">class Father</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    virtual void printM()</span><br><span class="line">    &#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line">//1.有继承</span><br><span class="line">class SonNULL :public Father</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    virtual void printM()//2.重写父类的虚函数</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;空指针异常&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">class SonOut :public Father</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    virtual void printM()</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;越位溢出&quot; &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">void func(int a,int b)</span><br><span class="line">&#123;</span><br><span class="line">    if (a == 0)</span><br><span class="line">    &#123;</span><br><span class="line">        throw SonNULL();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    if (b == 0)</span><br><span class="line">    &#123;</span><br><span class="line">        throw SonOut();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void test()</span><br><span class="line">&#123;</span><br><span class="line">    int a = 0;</span><br><span class="line">    int b = 10;</span><br><span class="line">    try</span><br><span class="line">    &#123;</span><br><span class="line">        func(a,b);</span><br><span class="line">    &#125;</span><br><span class="line">    catch (Father &amp;f)//3.父类引用指向子类对象</span><br><span class="line">    &#123;</span><br><span class="line">        f.printM();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="11-系统提供的标准异常"><a href="#11-系统提供的标准异常" class="headerlink" title="11.系统提供的标准异常"></a>11.系统提供的标准异常</h2><p>1.系统的标准异常类</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">#define _CRT_SECURE_NO_WARNINGS</span><br><span class="line">#include&lt;iostream&gt;</span><br><span class="line">using namespace std;</span><br><span class="line">#include&lt;stdexcept&gt;//2013Vs可以不用</span><br><span class="line">#include&lt;string&gt;</span><br><span class="line"></span><br><span class="line">class Maker</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    Maker(int age)</span><br><span class="line">    &#123;</span><br><span class="line">        if (age&lt;0 || age&gt;150)</span><br><span class="line">        &#123;</span><br><span class="line">            throw out_of_range(&quot;年龄不在范围内&quot;);</span><br><span class="line">            </span><br><span class="line">        &#125;</span><br><span class="line">        else</span><br><span class="line">        &#123;</span><br><span class="line">            this-&gt;age = age;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">public:</span><br><span class="line">    int age;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">void test()</span><br><span class="line">&#123;</span><br><span class="line">    try</span><br><span class="line">    &#123;</span><br><span class="line">        Maker m(200);</span><br><span class="line">    &#125;</span><br><span class="line">    catch (out_of_range &amp;ex)</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; ex.what() &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">    test();</span><br><span class="line">    system(&quot;pause&quot;);</span><br><span class="line">    return EXIT_SUCCESS;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>2.自己编写的异常类</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">class MyOut_of :public exception</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    MyOut_of(const char *errorinfo)</span><br><span class="line">    &#123;</span><br><span class="line">        //const char*转换string</span><br><span class="line">        this-&gt;m_Info = string(errorinfo);</span><br><span class="line">    &#125;</span><br><span class="line">    MyOut_of(const string errorinfo)</span><br><span class="line">    &#123;</span><br><span class="line">        this-&gt;m_Info = errorinfo;</span><br><span class="line">    &#125;</span><br><span class="line">    const char *  what() const</span><br><span class="line">    &#123;</span><br><span class="line">        //把string转换const char*</span><br><span class="line">        return this-&gt;m_Info.c_str();</span><br><span class="line">    &#125;</span><br><span class="line">public:</span><br><span class="line">    string m_Info;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">class Maker</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    Maker(int age)</span><br><span class="line">    &#123;</span><br><span class="line">        if (age&lt;0 || age&gt;150)</span><br><span class="line">        &#123;</span><br><span class="line">            </span><br><span class="line">            throw MyOut_of(&quot;自己的异常类，年龄不在范围内&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">        else</span><br><span class="line">        &#123;</span><br><span class="line">            this-&gt;age = age;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">public:</span><br><span class="line">    int age;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">void test()</span><br><span class="line">&#123;</span><br><span class="line">    try</span><br><span class="line">    &#123;</span><br><span class="line">        Maker m(200);</span><br><span class="line">    &#125;</span><br><span class="line">    catch (MyOut_of &amp;ex)</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; ex.what() &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<div class="article-footer reveal fs14"><section id="license"><div class="header"><span>License</span></div><div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
+</div></section></div>
+
+</article>
+
+<div class="related-wrap reveal" id="read-next"><section class="header cap theme"><span>READ NEXT</span></section><section class="body fs14"><a id="next" href="/2022/03/27/%E5%BC%BA%E5%88%B6%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/">C++ 强制类型转换<span class="note">Older</span></a><div class="line"></div></section></div>
+
+
+
+
+
+
+
+
+      
+<footer class="page-footer reveal fs12"><hr><div class="text"><p>All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</p>
+<p>This site was deployed by <a href="http://example.com/">@John Doe</a> using <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.6.1" title="v1.6.1">Stellar</a>.</p>
+</div></footer>
+
+      <div class='float-panel mobile-only blur' style='display:none'>
+  <button type='button' class='sidebar-toggle mobile' onclick='sidebar.toggle()'>
+    <svg class="icon" style="width: 1em; height: 1em;vertical-align: middle;fill: currentColor;overflow: hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="15301"><path d="M566.407 808.3c26.9-0.1 49.3-20.8 51.6-47.6-1.9-27.7-23.9-49.7-51.6-51.6h-412.6c-28.2-1.4-52.6 19.5-55.5 47.6 2.3 26.8 24.6 47.5 51.6 47.6h416.5v4z m309.3-249.9c26.9-0.1 49.3-20.8 51.6-47.6-2.2-26.8-24.6-47.5-51.6-47.6h-721.9c-27.7-2.8-52.5 17.4-55.3 45.1-0.1 0.8-0.1 1.7-0.2 2.5 0.9 27.2 23.6 48.5 50.7 47.6H875.707z m-103.1-245.9c26.9-0.1 49.3-20.8 51.6-47.6-0.4-28.3-23.2-51.1-51.5-51.6h-618.9c-29.5-1.1-54.3 21.9-55.5 51.4v0.2c1.4 27.8 25.2 49.2 53 47.8 0.8 0 1.7-0.1 2.5-0.2h618.8z" p-id="15302"></path><path d="M566.407 808.3c26.9-0.1 49.3-20.8 51.6-47.6-1.9-27.7-23.9-49.7-51.6-51.6h-412.6c-28.2-1.4-52.6 19.5-55.5 47.6 1.9 27.7 23.9 49.7 51.6 51.6h416.5z m309.3-249.9c26.9-0.1 49.3-20.8 51.6-47.6-2.2-26.8-24.6-47.5-51.6-47.6h-721.9c-27.7-2.8-52.5 17.4-55.3 45.1-0.1 0.8-0.1 1.7-0.2 2.5 0.9 27.2 23.6 48.5 50.7 47.6H875.707z m-103.1-245.9c26.9-0.1 49.3-20.8 51.6-47.6-0.4-28.3-23.2-51.1-51.5-51.6h-618.9c-29.5-1.1-54.3 21.9-55.5 51.4v0.2c1.4 27.8 25.2 49.2 53 47.8 0.8 0 1.7-0.1 2.5-0.2h618.8z" p-id="15303"></path></svg>
+  </button>
+</div>
+
+    </div>
+  </div>
+  <div class='scripts'>
+    <script type="text/javascript">
+  stellar = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    loadCSS: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    // 从 butterfly 和 volantis 获得灵感
+    loadScript: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    // https://github.com/jerryc127/hexo-theme-butterfly
+    jQuery: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        stellar.loadScript(stellar.plugins.jQuery).then(fn)
+      } else {
+        fn()
+      }
+    }
+  };
+  stellar.github = 'https://github.com/xaoxuu/hexo-theme-stellar/tree/1.6.1';
+  stellar.config = {
+    date_suffix: {
+      just: 'Just',
+      min: 'minutes ago',
+      hour: 'hours ago',
+      day: 'days ago',
+      month: 'months ago',
+    },
+  };
+
+  // required plugins (only load if needs)
+  stellar.plugins = {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js',
+    sitesjs: '/js/plugins/sites.js',
+    friendsjs: '/js/plugins/friends.js',
+  };
+
+  // optional plugins
+  if ('true' == 'true') {
+    stellar.plugins.lazyload = Object.assign({"enable":true,"js":"https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.3.1/dist/lazyload.min.js","transition":"blur"});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.swiper = Object.assign({"enable":true,"css":"https://unpkg.com/swiper@6/swiper-bundle.min.css","js":"https://unpkg.com/swiper@6/swiper-bundle.min.js"});
+  }
+  if ('' == 'true') {
+    stellar.plugins.scrollreveal = Object.assign({"enable":null,"js":"https://cdn.jsdelivr.net/npm/scrollreveal@4.0.9/dist/scrollreveal.min.js","distance":"8px","duration":500,"interval":100,"scale":1});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.preload = Object.assign({"enable":true,"service":"flying_pages","instant_page":"https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@4.1.2/js/instant_page.js","flying_pages":"https://cdn.jsdelivr.net/gh/gijo-varghese/flying-pages@2.1.2/flying-pages.min.js"});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.fancybox = Object.assign({"enable":true,"js":"https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.umd.js","css":"https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.css","selector":".swiper-slide img"});
+  }
+  if ('false' == 'true') {
+    stellar.plugins.heti = Object.assign({"enable":false,"css":"https://unpkg.com/heti/umd/heti.min.css","js":"https://unpkg.com/heti/umd/heti-addon.min.js"});
+  }
+</script>
+
+<!-- required -->
+
+  
+<script src="/js/main.js" async></script>
+
+
+
+<!-- optional -->
+
+
+
+<!-- inject -->
+
+
+  </div>
+</body>
+</html>
