@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+  <meta name="generator" content="Hexo 6.1.0">
+  <meta charset="utf-8">
+  
+
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  <link rel='dns-prefetch' href='https://cdn.jsdelivr.net'>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel='dns-prefetch' href='//unpkg.com'>
+
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" content="#f8f8f8">
+  <title>C++ STL2 - zmx'blog</title>
+
+  
+
+  
+    <meta name="description" content="STL中stack queue list set map等容器及其使用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++ STL2">
+<meta property="og:url" content="http://example.com/2022/04/14/STL%20stack%20queue%20list%20set%20map/index.html">
+<meta property="og:site_name" content="zmx&#39;blog">
+<meta property="og:description" content="STL中stack queue list set map等容器及其使用">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-04-14T14:15:31.302Z">
+<meta property="article:modified_time" content="2022-04-14T14:19:56.495Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="STL">
+<meta name="twitter:card" content="summary">
+  
+  
+
+  <!-- feed -->
+  
+
+  
+    
+<link rel="stylesheet" href="/css/main.css">
+
+  
+
+  
+
+  
+</head>
+
+<body>
+  
+
+
+
+
+  <div class='l_body' id='start'>
+    <aside class='l_left' layout='post'>
+    
+
+
+<header class="header">
+
+<div class="logo-wrap"><a class="title" href="/"><div class="main">zmx'blog</div></a></div>
+<nav class="menu dis-select"></nav></header>
+
+<div class="widgets">
+
+<div class="widget-wrap single" id="toc"><div class="widget-header cap dis-select"><span class="name">TOC</span></div><div class="widget-body fs14"><div class="doc-tree active"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#01-stack%E5%AE%B9%E5%99%A8"><span class="toc-text">01.stack容器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#02-queue%E5%AE%B9%E5%99%A8"><span class="toc-text">02.queue容器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#03-list%E5%AE%B9%E5%99%A8"><span class="toc-text">03.list容器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#04-%E7%94%B5%E6%A2%AF%E6%A1%88%E4%BE%8B"><span class="toc-text">04.电梯案例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#05-pair%E5%AF%B9%E7%BB%84"><span class="toc-text">05.pair对组</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#06-set-x2F-multiset%E5%AE%B9%E5%99%A8"><span class="toc-text">06.set&#x2F;multiset容器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#07-map-x2F-multimap%E5%AE%B9%E5%99%A8"><span class="toc-text">07.map&#x2F;multimap容器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#08-%E6%A1%88%E4%BE%8B"><span class="toc-text">08.案例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#09-STL%E7%9A%84%E6%B7%B1%E6%B5%85%E6%8B%B7%E8%B4%9D%E9%97%AE%E9%A2%98"><span class="toc-text">09.STL的深浅拷贝问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-%E5%87%BD%E6%95%B0%E5%AF%B9%E8%B1%A1"><span class="toc-text">10.函数对象</span></a></li></ol></div></div></div>
+
+
+</div>
+
+
+    </aside>
+    <div class='l_main'>
+      
+
+      
+
+<div class="bread-nav fs12"><div id="breadcrumb"><a class="cap breadcrumb" href="/">Home</a><span class="sep"></span><a class="cap breadcrumb" href="/">Blog</a></div><div id="post-meta">Posted on&nbsp;<time datetime="2022-04-14T14:15:31.302Z">2022-04-14</time></div></div>
+
+<article class='content md post'>
+<h1 class="article-title"><span>C++ STL2</span></h1>
+<p>STL中stack queue list set map等容器及其使用</p>
+<span id="more"></span>
+<h2 id="01-stack容器"><a href="#01-stack容器" class="headerlink" title="01.stack容器"></a>01.stack容器</h2><p>1.数据结构：连续的存储空间，只有一个出口，先进后出特性</p>
+<p>2.迭代器:没有迭代器</p>
+<p>3.常用的api:</p>
+<p>​    1.构造函数</p>
+<p>​    2.赋值        <strong>&#x3D;</strong></p>
+<p>​    3.数据存取    <strong>push pop top</strong></p>
+<p>​    3.大小操作    <strong>empty size</strong></p>
+<h2 id="02-queue容器"><a href="#02-queue容器" class="headerlink" title="02.queue容器"></a>02.queue容器</h2><p>1.数据结构：连续的存储空间，有两个口，一个是进入数据，一个是出数据，有先进先出的特性</p>
+<p>2.迭代器：没有迭代器</p>
+<p>3.常用的api:</p>
+<p>​    1.构造函数</p>
+<p>​    2.存取、插入和删除操作    <strong>push pop back top</strong></p>
+<p>​    3.赋值    <strong>&#x3D;</strong></p>
+<p>​    4.大小操作    <strong>empty size</strong></p>
+<h2 id="03-list容器"><a href="#03-list容器" class="headerlink" title="03.list容器"></a>03.list容器</h2><p>1.数据结构：双向循环链表</p>
+<p>2.迭代器：双向迭代器</p>
+<p>3.常用的api:</p>
+<p>​    1.构造</p>
+<p>​    2.数据元素的插入和删除    <strong>push_back pop_back push_front pop_front insert    clear erase remove</strong></p>
+<p>​    3.大小操作    <strong>size empty resize</strong></p>
+<p>​    4.赋值操作    <strong>assign &#x3D; swap</strong></p>
+<p>​    5.数据的存取    <strong>front back</strong></p>
+<p>​    6.反转和排序    <strong>reverse sort</strong></p>
+<p>4.注意：list容器不能使用常用的sort,只能使用自己的sort</p>
+<p>插入操作和删除操作都不会造成原有list迭代器的失效 </p>
+<h2 id="04-电梯案例"><a href="#04-电梯案例" class="headerlink" title="04.电梯案例"></a>04.电梯案例</h2><p>1.目的：获取进出电梯人数及姓名，并打印出来</p>
+<p>2.思路：</p>
+<p>​    1.抽象人员</p>
+<p>​    2.抽象电梯（list）</p>
+<p>​    3.进电梯的人（queue）</p>
+<p>​    4.把进电梯和出电梯的人拷贝一份放入vector中，待打印</p>
+<p>3.流程：</p>
+<p>​    1.电梯上升</p>
+<p>​    2.创建人员</p>
+<p>​    3.判断进电梯条件，然后进电梯</p>
+<p>​    4.判断出电梯条件，然后出电梯</p>
+<p>​    5.打印出电梯和进电梯人员的人数和姓名</p>
+<h2 id="05-pair对组"><a href="#05-pair对组" class="headerlink" title="05.pair对组"></a>05.pair对组</h2><p>1.pair对组是一个类，类中有两个公有的成员变量</p>
+<p>2.对组通常用来接收key-vluae这样的元素</p>
+<h2 id="06-set-x2F-multiset容器"><a href="#06-set-x2F-multiset容器" class="headerlink" title="06.set&#x2F;multiset容器"></a>06.set&#x2F;multiset容器</h2><p>1.set容器是关联式容器，容器自身有规则，通过键值排序，set容器中的元素是键值也是实值</p>
+<p>2.set容器和multiset容器的区别是multiset允许有相同的元素</p>
+<p>3.数据结构：平衡二叉树</p>
+<p>4.迭代器：双向迭代器</p>
+<p>5.常用的api:</p>
+<p>​    1.构造</p>
+<p>​    2.赋值    <strong>&#x3D; swap</strong></p>
+<p>​    3.大小    <strong>size empty</strong></p>
+<p>​    4.插入和删除    **insert clear erase **</p>
+<p>​    5.查找操作    <strong>find count low_bound(&gt;&#x3D;第一个） upper_bound（&lt;第一个） equal_range（&gt;&#x3D;2 的两个）</strong></p>
+<p>6.改变规则：默认是从小到大，改变规则，加入谓词到&lt;&gt;第二个参数中</p>
+<p>7.注意：</p>
+<p>​    1.set容器插入相同元素时，不会报错，但是不插入数据</p>
+<p>​    2.set容器存储对象时，需要告诉set容器的排序规则</p>
+<p>​    </p>
+<h2 id="07-map-x2F-multimap容器"><a href="#07-map-x2F-multimap容器" class="headerlink" title="07.map&#x2F;multimap容器"></a>07.map&#x2F;multimap容器</h2><p>1.map&#x2F;multimap也是关联式容器，容器自身有规则，通过键值排序，map容器中的元素是对组，对组的第一个元素是键值，不能改变，第二个元素是实值，可以改变</p>
+<p>2.数据结构：平衡二叉树</p>
+<p>3.迭代器：双向迭代器</p>
+<p>4.map容器和multimap容器的区别是multimap允许有相同的元素</p>
+<p>5.常用的api:</p>
+<p>​    1.构造    </p>
+<p>​    2.赋值    ****</p>
+<p>​    3.大小</p>
+<p>​    4.查找    <strong>find count low_bound(&gt;&#x3D;第一个） upper_bound（&lt;第一个） equal_range（&gt;&#x3D;2 的两个）</strong></p>
+<p>​    5.插入    <strong>insert(pair&lt; , &gt;( , )) insert(make_pair( , ))  insert(map&lt;,&gt;::value_type( , )  map[ 键值]&#x3D;”实值”</strong></p>
+<p>​    6.删除    <strong>clear erase</strong></p>
+<p>使用[ ]时，如果该键值不存在，会插入</p>
+<h2 id="08-案例"><a href="#08-案例" class="headerlink" title="08.案例"></a>08.案例</h2><p>1.目的：公司今天招聘了5个员工，5名员工进入公司之后，需要指派员工在那个部门工作，指派完成后打印员工部门和员工信息</p>
+<p>2.思路：</p>
+<p>​    1.抽象员工</p>
+<p>​    2.把未分组员工放入到vector容器中</p>
+<p>​    3.把分组好的员工信息放入到multimap中</p>
+<p>3.流程：</p>
+<p>​    1.创建员工</p>
+<p>​    2.分组员工</p>
+<p>​    3.打印员工信息</p>
+<h2 id="09-STL的深浅拷贝问题"><a href="#09-STL的深浅拷贝问题" class="headerlink" title="09.STL的深浅拷贝问题"></a>09.STL的深浅拷贝问题</h2><p>1.把对象放入容器，其实是拷贝一份对象到容器。</p>
+<p>2.注意：</p>
+<p>​    1.拷贝构造要能被调用<br>​    2.注意要浅拷贝问题    </p>
+<h2 id="10-函数对象"><a href="#10-函数对象" class="headerlink" title="10.函数对象"></a>10.函数对象</h2><p>1.什么是函数对象</p>
+<p>​    1.类中重载了()，这个类实例化的对象叫函数对象（仿函数）;</p>
+<p>​    2.一元仿函数是operator()中只需要一个参数。二元仿函数是operator()中需要二个参数</p>
+<p>2.有什么用</p>
+<p>​    1.做为算法的策略</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">void test()</span><br><span class="line">&#123;</span><br><span class="line">    vector&lt;int&gt; v;</span><br><span class="line">    v.push_back(8);</span><br><span class="line">    v.push_back(1);</span><br><span class="line">    v.push_back(6);</span><br><span class="line">    v.push_back(3);</span><br><span class="line">    v.push_back(7);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    sort(v.begin(), v.end(), greater&lt;int&gt;());</span><br><span class="line"></span><br><span class="line">    for_each(v.begin(), v.end(), [](int val)&#123;cout &lt;&lt; val &lt;&lt; &quot; &quot;; &#125;);</span><br><span class="line">    //[](int val)&#123;cout &lt;&lt; val &lt;&lt; &quot; &quot;; &#125;//匿名函数</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>3.函数对象和普通函数的区别</p>
+<p>​    1.函数对象可以有自己的状态</p>
+<p>​    2.普通函数没有类型，函数对象有类型</p>
+<p>​    3.函数对象比普通函数执行效率有可能更高（成员函数自动申请为内联函数）</p>
+<p>4.谓词</p>
+<p>​    1.谓词是指普通函数或重载的operator()返回值是bool类型的函数对象(仿函数)。</p>
+<p>​    2.谓词可以作为一个判断式</p>
+<p>​    3.接受一个参数，那么叫做一元谓词,如果接受两个参数，那么叫做二元谓词</p>
+<p>5.内建函数对象</p>
+<p>​    1.使用内建的函数对象要加入头文件#include<functional></p>
+<p>​    </p>
+
+
+<div class="article-footer reveal fs14"><section id="license"><div class="header"><span>License</span></div><div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
+</div></section></div>
+
+</article>
+
+<div class="related-wrap reveal" id="read-next"><section class="header cap theme"><span>READ NEXT</span></section><section class="body fs14"><a id="next" href="/2022/04/14/%E6%96%87%E4%BB%B6IO/">C++ 文件IO<span class="note">Older</span></a><div class="line"></div><a id="prev" href="/2022/04/14/STL%E9%80%82%E9%85%8D%E5%99%A8%E5%92%8C%E7%AE%97%E6%B3%95/">C++ STL3<span class="note">Newer</span></a></section></div>
+
+
+
+
+
+
+
+
+      
+<footer class="page-footer reveal fs12"><hr><div class="text"><p>All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</p>
+<p>This site was deployed by <a href="http://example.com/">@John Doe</a> using <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.6.1" title="v1.6.1">Stellar</a>.</p>
+</div></footer>
+
+      <div class='float-panel mobile-only blur' style='display:none'>
+  <button type='button' class='sidebar-toggle mobile' onclick='sidebar.toggle()'>
+    <svg class="icon" style="width: 1em; height: 1em;vertical-align: middle;fill: currentColor;overflow: hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="15301"><path d="M566.407 808.3c26.9-0.1 49.3-20.8 51.6-47.6-1.9-27.7-23.9-49.7-51.6-51.6h-412.6c-28.2-1.4-52.6 19.5-55.5 47.6 2.3 26.8 24.6 47.5 51.6 47.6h416.5v4z m309.3-249.9c26.9-0.1 49.3-20.8 51.6-47.6-2.2-26.8-24.6-47.5-51.6-47.6h-721.9c-27.7-2.8-52.5 17.4-55.3 45.1-0.1 0.8-0.1 1.7-0.2 2.5 0.9 27.2 23.6 48.5 50.7 47.6H875.707z m-103.1-245.9c26.9-0.1 49.3-20.8 51.6-47.6-0.4-28.3-23.2-51.1-51.5-51.6h-618.9c-29.5-1.1-54.3 21.9-55.5 51.4v0.2c1.4 27.8 25.2 49.2 53 47.8 0.8 0 1.7-0.1 2.5-0.2h618.8z" p-id="15302"></path><path d="M566.407 808.3c26.9-0.1 49.3-20.8 51.6-47.6-1.9-27.7-23.9-49.7-51.6-51.6h-412.6c-28.2-1.4-52.6 19.5-55.5 47.6 1.9 27.7 23.9 49.7 51.6 51.6h416.5z m309.3-249.9c26.9-0.1 49.3-20.8 51.6-47.6-2.2-26.8-24.6-47.5-51.6-47.6h-721.9c-27.7-2.8-52.5 17.4-55.3 45.1-0.1 0.8-0.1 1.7-0.2 2.5 0.9 27.2 23.6 48.5 50.7 47.6H875.707z m-103.1-245.9c26.9-0.1 49.3-20.8 51.6-47.6-0.4-28.3-23.2-51.1-51.5-51.6h-618.9c-29.5-1.1-54.3 21.9-55.5 51.4v0.2c1.4 27.8 25.2 49.2 53 47.8 0.8 0 1.7-0.1 2.5-0.2h618.8z" p-id="15303"></path></svg>
+  </button>
+</div>
+
+    </div>
+  </div>
+  <div class='scripts'>
+    <script type="text/javascript">
+  stellar = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    loadCSS: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    // 从 butterfly 和 volantis 获得灵感
+    loadScript: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    // https://github.com/jerryc127/hexo-theme-butterfly
+    jQuery: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        stellar.loadScript(stellar.plugins.jQuery).then(fn)
+      } else {
+        fn()
+      }
+    }
+  };
+  stellar.github = 'https://github.com/xaoxuu/hexo-theme-stellar/tree/1.6.1';
+  stellar.config = {
+    date_suffix: {
+      just: 'Just',
+      min: 'minutes ago',
+      hour: 'hours ago',
+      day: 'days ago',
+      month: 'months ago',
+    },
+  };
+
+  // required plugins (only load if needs)
+  stellar.plugins = {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js',
+    sitesjs: '/js/plugins/sites.js',
+    friendsjs: '/js/plugins/friends.js',
+  };
+
+  // optional plugins
+  if ('true' == 'true') {
+    stellar.plugins.lazyload = Object.assign({"enable":true,"js":"https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.3.1/dist/lazyload.min.js","transition":"blur"});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.swiper = Object.assign({"enable":true,"css":"https://unpkg.com/swiper@6/swiper-bundle.min.css","js":"https://unpkg.com/swiper@6/swiper-bundle.min.js"});
+  }
+  if ('' == 'true') {
+    stellar.plugins.scrollreveal = Object.assign({"enable":null,"js":"https://cdn.jsdelivr.net/npm/scrollreveal@4.0.9/dist/scrollreveal.min.js","distance":"8px","duration":500,"interval":100,"scale":1});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.preload = Object.assign({"enable":true,"service":"flying_pages","instant_page":"https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@4.1.2/js/instant_page.js","flying_pages":"https://cdn.jsdelivr.net/gh/gijo-varghese/flying-pages@2.1.2/flying-pages.min.js"});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.fancybox = Object.assign({"enable":true,"js":"https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.umd.js","css":"https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.css","selector":".swiper-slide img"});
+  }
+  if ('false' == 'true') {
+    stellar.plugins.heti = Object.assign({"enable":false,"css":"https://unpkg.com/heti/umd/heti.min.css","js":"https://unpkg.com/heti/umd/heti-addon.min.js"});
+  }
+</script>
+
+<!-- required -->
+
+  
+<script src="/js/main.js" async></script>
+
+
+
+<!-- optional -->
+
+
+
+<!-- inject -->
+
+
+  </div>
+</body>
+</html>
