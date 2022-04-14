@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+  <meta name="generator" content="Hexo 6.1.0">
+  <meta charset="utf-8">
+  
+
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  <link rel='dns-prefetch' href='https://cdn.jsdelivr.net'>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel='dns-prefetch' href='//unpkg.com'>
+
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" content="#f8f8f8">
+  <title>C++ STL1 - zmx'blog</title>
+
+  
+
+  
+    <meta name="description" content="STL中string vector deque等容器及其使用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++ STL1">
+<meta property="og:url" content="http://example.com/2022/04/14/STL1/index.html">
+<meta property="og:site_name" content="zmx&#39;blog">
+<meta property="og:description" content="STL中string vector deque等容器及其使用">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-04-14T14:15:19.426Z">
+<meta property="article:modified_time" content="2022-04-14T15:06:00.065Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="STL">
+<meta name="twitter:card" content="summary">
+  
+  
+
+  <!-- feed -->
+  
+
+  
+    
+<link rel="stylesheet" href="/css/main.css">
+
+  
+
+  
+
+  
+</head>
+
+<body>
+  
+
+
+
+
+  <div class='l_body' id='start'>
+    <aside class='l_left' layout='post'>
+    
+
+
+<header class="header">
+
+<div class="logo-wrap"><a class="title" href="/"><div class="main">zmx'blog</div></a></div>
+<nav class="menu dis-select"></nav></header>
+
+<div class="widgets">
+
+<div class="widget-wrap single" id="toc"><div class="widget-header cap dis-select"><span class="name">TOC</span></div><div class="widget-body fs14"><div class="doc-tree active"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#01-STL%E7%9A%84%E4%BB%8B%E7%BB%8D"><span class="toc-text">01.STL的介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-STL-Standard-TemplateLibrary-%E6%A0%87%E5%87%86%E6%A8%A1%E6%9D%BF%E5%BA%93"><span class="toc-text">1.STL(Standard TemplateLibrary,标准模板库)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-STL%E6%8F%90%E4%BE%9B%E4%BA%86%E5%85%AD%E5%A4%A7%E7%BB%84%E4%BB%B6-%E5%AE%B9%E5%99%A8%EF%BC%8C%E7%AE%97%E6%B3%95%EF%BC%8C%E8%BF%AD%E4%BB%A3%E5%99%A8%EF%BC%8C%E4%BB%BF%E5%87%BD%E6%95%B0%EF%BC%8C%E9%80%82%E9%85%8D%E5%99%A8%EF%BC%8C%E7%A9%BA%E9%97%B4%E9%85%8D%E7%BD%AE%E5%99%A8"><span class="toc-text">2.STL提供了六大组件:容器，算法，迭代器，仿函数，适配器，空间配置器</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#02-%E4%B8%89%E5%A4%A7%E7%BB%84%E4%BB%B6"><span class="toc-text">02.三大组件</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%B9%E5%99%A8%EF%BC%9A%E5%BA%8F%E5%88%97%E5%BC%8F%E5%AE%B9%E5%99%A8%E5%92%8C%E5%85%B3%E8%81%94%E5%BC%8F%E5%AE%B9%E5%99%A8"><span class="toc-text">容器：序列式容器和关联式容器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%AE%97%E6%B3%95%E5%88%86%E4%B8%BA-%E8%B4%A8%E5%8F%98%E7%AE%97%E6%B3%95%E5%92%8C%E9%9D%9E%E8%B4%A8%E5%8F%98%E7%AE%97%E6%B3%95"><span class="toc-text">算法分为:质变算法和非质变算法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%AD%E4%BB%A3%E5%99%A8%EF%BC%9A%E9%87%8D%E7%82%B9%E5%AD%A6%E4%B9%A0%E5%8F%8C%E5%90%91%E8%BF%AD%E4%BB%A3%E5%99%A8%E5%92%8C%E9%9A%8F%E6%9C%BA%E8%AE%BF%E9%97%AE%E8%BF%AD%E4%BB%A3%E5%99%A8"><span class="toc-text">迭代器：重点学习双向迭代器和随机访问迭代器</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89%E5%A4%A7%E7%BB%84%E4%BB%B6%E7%9A%84%E5%85%B3%E7%B3%BB%EF%BC%9A%E5%AE%B9%E5%99%A8%E5%AD%98%E5%82%A8%E6%95%B0%E6%8D%AE%EF%BC%8C%E5%B9%B6%E4%B8%94%E6%8F%90%E4%BE%9B%E8%BF%AD%E4%BB%A3%E5%99%A8%EF%BC%8C%E7%AE%97%E6%B3%95%E4%BD%BF%E7%94%A8%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%9D%A5%E6%93%8D%E4%BD%9C%E5%AE%B9%E5%99%A8%E4%B8%AD%E7%9A%84%E5%85%83%E7%B4%A0"><span class="toc-text">三大组件的关系：容器存储数据，并且提供迭代器，算法使用迭代器来操作容器中的元素</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#03-STL%E7%9A%84%E5%B7%A5%E4%BD%9C%E6%9C%BA%E5%88%B6"><span class="toc-text">03.STL的工作机制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#04-STL%E7%9A%84hello-world"><span class="toc-text">04.STL的hello world</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#05-string%E5%AE%B9%E5%99%A8"><span class="toc-text">05.string容器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#06-vector%E5%AE%B9%E5%99%A8"><span class="toc-text">06.vector容器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#07-deque%E5%AE%B9%E5%99%A8-%E5%8F%8C%E5%90%91vector"><span class="toc-text">07.deque容器 双向vector</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#08-%E6%89%93%E5%88%86%E6%A1%88%E4%BE%8B"><span class="toc-text">08.打分案例</span></a></li></ol></div></div></div>
+
+
+</div>
+
+
+    </aside>
+    <div class='l_main'>
+      
+
+      
+
+<div class="bread-nav fs12"><div id="breadcrumb"><a class="cap breadcrumb" href="/">Home</a><span class="sep"></span><a class="cap breadcrumb" href="/">Blog</a></div><div id="post-meta">Posted on&nbsp;<time datetime="2022-04-14T14:15:19.426Z">2022-04-14</time></div></div>
+
+<article class='content md post'>
+<h1 class="article-title"><span>C++ STL1</span></h1>
+<p>STL中string vector deque等容器及其使用</p>
+<span id="more"></span>
+<h2 id="01-STL的介绍"><a href="#01-STL的介绍" class="headerlink" title="01.STL的介绍"></a>01.STL的介绍</h2><h4 id="1-STL-Standard-TemplateLibrary-标准模板库"><a href="#1-STL-Standard-TemplateLibrary-标准模板库" class="headerlink" title="1.STL(Standard TemplateLibrary,标准模板库)"></a>1.STL(Standard TemplateLibrary,标准模板库)</h4><h4 id="2-STL提供了六大组件-容器，算法，迭代器，仿函数，适配器，空间配置器"><a href="#2-STL提供了六大组件-容器，算法，迭代器，仿函数，适配器，空间配置器" class="headerlink" title="2.STL提供了六大组件:容器，算法，迭代器，仿函数，适配器，空间配置器"></a>2.STL提供了六大组件:容器，算法，迭代器，仿函数，适配器，空间配置器</h4><p>​    容器：各种数据结构</p>
+<p>​    算法：各种常用的   算法（冒泡，排序）</p>
+<p>​    迭代器：扮演了容器与算法之间的胶合剂（类似于指针等）</p>
+<p>​    仿函数：行为类似函数，可作为算法的某种策略</p>
+<p>​    适配器：一种用来修饰容器或者仿函数或迭代器接口的东西</p>
+<p>​    空间配置器：负责空间的配置与管理</p>
+<p>STL六大组件的交互关系，容器通过空间配置器取得数据存储空间，算法通过迭代器存储容器中的内容，仿函数可以协助算法完成不同的策略的变化，适配器可以修饰仿函数。</p>
+<h2 id="02-三大组件"><a href="#02-三大组件" class="headerlink" title="02.三大组件"></a>02.三大组件</h2><h4 id="容器：序列式容器和关联式容器"><a href="#容器：序列式容器和关联式容器" class="headerlink" title="容器：序列式容器和关联式容器"></a>容器：<strong>序列式容器</strong>和<strong>关联式容器</strong></h4><p>序列式容器：序列式容器就是容器元素在容器中的位置是由元素进入容器的时间和地点来决定</p>
+<p>vector  deque list stack queue</p>
+<p>关联式容器：关联式容器是指容器已经有了一定的规则，容器元素在容器中的位置由容器的规则来决定</p>
+<p>set&#x2F;multiset map&#x2F;multimap</p>
+<br/>
+
+<h4 id="算法分为-质变算法和非质变算法"><a href="#算法分为-质变算法和非质变算法" class="headerlink" title="算法分为:质变算法和非质变算法"></a>算法分为:<strong>质变算法</strong>和<strong>非质变算法</strong></h4><p>质变算法：是指运算过程中会更改区间内的元素的内容</p>
+<p>非质变算法：是指运算过程中不会更改区间内的元素内容</p>
+<br/>
+
+<h4 id="迭代器：重点学习双向迭代器和随机访问迭代器"><a href="#迭代器：重点学习双向迭代器和随机访问迭代器" class="headerlink" title="迭代器：重点学习双向迭代器和随机访问迭代器"></a>迭代器：重点学习双向迭代器和随机访问迭代器</h4><p>双向迭代器：++,–可以访问下一个元素和上一个元素</p>
+<p>随机访问迭代器：+2，可以跳2个元素访问元素</p>
+<br/>
+
+<h3 id="三大组件的关系：容器存储数据，并且提供迭代器，算法使用迭代器来操作容器中的元素"><a href="#三大组件的关系：容器存储数据，并且提供迭代器，算法使用迭代器来操作容器中的元素" class="headerlink" title="三大组件的关系：容器存储数据，并且提供迭代器，算法使用迭代器来操作容器中的元素"></a>三大组件的关系：容器存储数据，并且提供迭代器，算法使用迭代器来操作容器中的元素</h3><h2 id="03-STL的工作机制"><a href="#03-STL的工作机制" class="headerlink" title="03.STL的工作机制"></a>03.STL的工作机制</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line">#define _CRT_SECURE_NO_WARNINGS</span><br><span class="line">#include&lt;iostream&gt;</span><br><span class="line">using namespace std;</span><br><span class="line">//数组容器</span><br><span class="line">template&lt;class T&gt;</span><br><span class="line">class MyArray</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line"></span><br><span class="line">    //保护原生指针，给原生指针取别名</span><br><span class="line">    typedef T* iterator;</span><br><span class="line">    MyArray()</span><br><span class="line">    &#123;</span><br><span class="line">        mCapacity = 10;</span><br><span class="line">        mSize = 10;</span><br><span class="line">        p = new T[mCapacity];</span><br><span class="line">        for (int i = 0; i &lt; mCapacity; i++)</span><br><span class="line">        &#123;</span><br><span class="line">            p[i] = i + 1;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    //提供迭代器，开始位置的迭代器</span><br><span class="line">    T* begin()</span><br><span class="line">    &#123;</span><br><span class="line">        return p;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    //返回结束位置的迭代器</span><br><span class="line">    T* end()</span><br><span class="line">    &#123;</span><br><span class="line">        return p + mSize;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">public:</span><br><span class="line">    T* p;</span><br><span class="line">    int mCapacity;</span><br><span class="line">    int mSize;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">//算法</span><br><span class="line">template&lt;class T&gt;</span><br><span class="line">void printArray(T begin,T end)</span><br><span class="line">&#123;</span><br><span class="line">    for (; begin != end; ++begin)</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; *begin &lt;&lt; &quot; &quot;;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line">void test01()</span><br><span class="line">&#123;</span><br><span class="line">    MyArray&lt;int&gt; arr;</span><br><span class="line"></span><br><span class="line">    //获取容器提供的开始位置迭代器</span><br><span class="line">    MyArray&lt;int&gt;::iterator begin=arr.begin();</span><br><span class="line">    //获取容器提供的结束位置迭代器</span><br><span class="line">    MyArray&lt;int&gt;::iterator end = arr.end();</span><br><span class="line"></span><br><span class="line">    printArray(begin, end);</span><br><span class="line">&#125;</span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">    test01();</span><br><span class="line">    system(&quot;pause&quot;);</span><br><span class="line">    return EXIT_SUCCESS;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="04-STL的hello-world"><a href="#04-STL的hello-world" class="headerlink" title="04.STL的hello world"></a>04.STL的hello world</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br></pre></td><td class="code"><pre><span class="line">#define _CRT_SECURE_NO_WARNINGS</span><br><span class="line">#include&lt;iostream&gt;</span><br><span class="line">#include&lt;vector&gt;//容器</span><br><span class="line">#include&lt;algorithm&gt;//算法的头文件</span><br><span class="line">#include&lt;string&gt;</span><br><span class="line">using namespace std;</span><br><span class="line"></span><br><span class="line">//加入算法的回调函数</span><br><span class="line">void MyPrint(int val)</span><br><span class="line">&#123;</span><br><span class="line">    cout &lt;&lt; val &lt;&lt; &quot; &quot;;</span><br><span class="line">&#125;</span><br><span class="line">//1.存储数据</span><br><span class="line">void test01()</span><br><span class="line">&#123;</span><br><span class="line">    //容器</span><br><span class="line">    vector&lt;int&gt; v;</span><br><span class="line">    v.push_back(10);</span><br><span class="line">    v.push_back(20);</span><br><span class="line">    v.push_back(30);</span><br><span class="line">    v.push_back(40);</span><br><span class="line">    v.push_back(50);</span><br><span class="line"></span><br><span class="line">    //获取开始位置的迭代器</span><br><span class="line">    vector&lt;int&gt;::iterator begin = v.begin();</span><br><span class="line">    //获取结束位置的迭代器</span><br><span class="line">    vector&lt;int&gt;::iterator end = v.end();</span><br><span class="line">    /*</span><br><span class="line">    void _For_each(_InIt _First, _InIt _Last, _Fn1&amp; _Func)</span><br><span class="line">    &#123;    </span><br><span class="line">        for (; _First != _Last; ++_First)</span><br><span class="line">            _Func(*_First);</span><br><span class="line">    &#125;</span><br><span class="line">    */</span><br><span class="line">    //遍历算法</span><br><span class="line">    for_each(begin, end, MyPrint);</span><br><span class="line">    cout &lt;&lt; endl;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//2.容器存储对象</span><br><span class="line">class Maker</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    Maker(string name, int age)</span><br><span class="line">    &#123;</span><br><span class="line">        this-&gt;name = name;</span><br><span class="line">        this-&gt;age = age;</span><br><span class="line">    &#125;</span><br><span class="line">public:</span><br><span class="line">    string name;</span><br><span class="line">    int age;</span><br><span class="line">&#125;;</span><br><span class="line">ostream &amp;operator&lt;&lt;(ostream &amp;out, Maker &amp;m)</span><br><span class="line">&#123;</span><br><span class="line">    out &lt;&lt; &quot;Name:&quot; &lt;&lt; m.name &lt;&lt; &quot; Age:&quot; &lt;&lt; m.age &lt;&lt; endl;</span><br><span class="line">    return out;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void test02()</span><br><span class="line">&#123;</span><br><span class="line">    vector&lt;Maker&gt; v;</span><br><span class="line">    //往容器中存储对象</span><br><span class="line">    v.push_back(Maker(&quot;悟空&quot;, 18));</span><br><span class="line">    v.push_back(Maker(&quot;小林&quot;, 19));</span><br><span class="line">    v.push_back(Maker(&quot;贝吉塔&quot;, 25));</span><br><span class="line">    v.push_back(Maker(&quot;龟仙人&quot;, 200));</span><br><span class="line">    v.push_back(Maker(&quot;短笛&quot;, 180));</span><br><span class="line"></span><br><span class="line">    //获取开始和结束位置的迭代器</span><br><span class="line">    vector&lt;Maker&gt;::iterator begin = v.begin();</span><br><span class="line">    vector&lt;Maker&gt;::iterator end = v.end();</span><br><span class="line"></span><br><span class="line">    while (begin!=end)</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; (*begin);</span><br><span class="line">        begin++;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">//3.存储对象的指针</span><br><span class="line">void test03()</span><br><span class="line">&#123;</span><br><span class="line">    vector&lt;Maker*&gt; v;</span><br><span class="line">    //创建数据</span><br><span class="line">    Maker *m1 = new Maker(&quot;悟空&quot;, 18);</span><br><span class="line">    Maker *m2 = new Maker(&quot;小林&quot;, 19);</span><br><span class="line">    Maker *m3 = new Maker(&quot;贝吉塔&quot;,200 );</span><br><span class="line">    Maker *m4 = new Maker(&quot;龟仙人&quot;,180 );</span><br><span class="line">    Maker *m5 = new Maker(&quot;短笛&quot;, 18);</span><br><span class="line"></span><br><span class="line">    v.push_back(m1);</span><br><span class="line">    v.push_back(m2);</span><br><span class="line">    v.push_back(m3);</span><br><span class="line">    v.push_back(m4);</span><br><span class="line">    v.push_back(m5);</span><br><span class="line"></span><br><span class="line">    vector&lt;Maker*&gt;::iterator begin = v.begin();</span><br><span class="line">    vector&lt;Maker*&gt;::iterator end = v.end();</span><br><span class="line"></span><br><span class="line">    while (begin!=end)</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; (*begin)-&gt;name &lt;&lt; &quot; &quot; &lt;&lt; (*begin)-&gt;age &lt;&lt; endl;</span><br><span class="line">        ++begin;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    delete m1;</span><br><span class="line">    delete m2;</span><br><span class="line">    delete m3;</span><br><span class="line">    delete m4;</span><br><span class="line">    delete m5;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//4.容器嵌套容器</span><br><span class="line">void test04()</span><br><span class="line">&#123;</span><br><span class="line">    vector&lt;vector&lt;int&gt;&gt; vs;</span><br><span class="line"></span><br><span class="line">    vector&lt;int&gt; v1;</span><br><span class="line">    vector&lt;int&gt; v2;</span><br><span class="line">    vector&lt;int&gt; v3;</span><br><span class="line">    vector&lt;int&gt; v4;</span><br><span class="line">    vector&lt;int&gt; v5;</span><br><span class="line"></span><br><span class="line">    for (int i = 0; i &lt; 5; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        v1.push_back(i + 10);</span><br><span class="line">        v2.push_back(i + 10);</span><br><span class="line">        v3.push_back(i + 10);</span><br><span class="line">        v4.push_back(i + 10);</span><br><span class="line">        v5.push_back(i + 10);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    vs.push_back(v1);</span><br><span class="line">    vs.push_back(v2);</span><br><span class="line">    vs.push_back(v3);</span><br><span class="line">    vs.push_back(v4);</span><br><span class="line">    vs.push_back(v5);</span><br><span class="line"></span><br><span class="line">    vector&lt;vector&lt;int&gt;&gt;::iterator begin = vs.begin();</span><br><span class="line">    vector&lt;vector&lt;int&gt;&gt;::iterator end = vs.end();</span><br><span class="line"></span><br><span class="line">    while (begin!=end)</span><br><span class="line">    &#123;</span><br><span class="line">        vector&lt;int&gt;::iterator sbegin = (*begin).begin();</span><br><span class="line">        vector&lt;int&gt;::iterator send = (*begin).end();</span><br><span class="line"></span><br><span class="line">        while (sbegin!=send)</span><br><span class="line">        &#123;</span><br><span class="line">            cout &lt;&lt; *sbegin &lt;&lt; &quot; &quot;;</span><br><span class="line">            ++sbegin;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        cout &lt;&lt; endl;</span><br><span class="line">        ++begin;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">    test04();</span><br><span class="line">    system(&quot;pause&quot;);</span><br><span class="line">    return EXIT_SUCCESS;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="05-string容器"><a href="#05-string容器" class="headerlink" title="05.string容器"></a>05.string容器</h2><p>1.数据结构：连续的存储空间，用一个char*指向这片空间</p>
+<p>2.迭代器:随机访问迭代器</p>
+<p>3.常用的api：</p>
+<p>​    1.构造</p>
+<pre><code>**string()**
+
+**string(const string&amp; string)**
+
+***string(const char* s)**
+
+**string(int n,char c)**
+</code></pre>
+<p>​    2.基本赋值    <strong>&#x3D;       assign</strong></p>
+<p>​    3.存取字符    <strong>[ ]</strong>    <strong>at</strong></p>
+<p>​    4.拼接     <strong>+&#x3D;  append</strong></p>
+<p>​    5.查找和替换     <strong>find rfind replace</strong></p>
+<p>​    6.比较    <strong>compare (&gt;返回1 &lt;返回-1 &#x3D;返回0</strong></p>
+<p>​    7.子串    <strong>substr</strong></p>
+<p>​    8.插入和删除     <strong>insert erase</strong></p>
+<p>​    9.string和const char转换         **<strong>c_str</strong></p>
+<p>4.常用的api中的注意:</p>
+<p>​    1.[]和at区别：[]如果越界，不抛异常，直接挂。at会抛异常</p>
+<p>​    2.字符串内存重新分配，[]和at获取的字符引用，再次使用时，可以能会出错</p>
+<p>​    3.string和char *的区别：string是一个类，char *是一个指针</p>
+<p>​    </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">void test()</span><br><span class="line">&#123;</span><br><span class="line">    string s = &quot;abcde&quot;;</span><br><span class="line">    char &amp;a = s[2];</span><br><span class="line">    char &amp;b = s[3];</span><br><span class="line"></span><br><span class="line">    a = &#x27;1&#x27;;</span><br><span class="line">    b = &#x27;2&#x27;;</span><br><span class="line">    cout &lt;&lt; &quot;a:&quot; &lt;&lt; a &lt;&lt; endl;</span><br><span class="line">    cout &lt;&lt; &quot;b:&quot; &lt;&lt; b &lt;&lt; endl;</span><br><span class="line">    cout &lt;&lt; s &lt;&lt; endl;</span><br><span class="line">    cout &lt;&lt; &quot;字符串的原空间地址:&quot; &lt;&lt; (int*)s.c_str() &lt;&lt; endl;</span><br><span class="line"></span><br><span class="line">    s = &quot;fdasfdasfdsafdasherewrkewhsaferew&quot;;</span><br><span class="line">    cout &lt;&lt; &quot;字符串的空间地址:&quot; &lt;&lt; (int*)s.c_str() &lt;&lt; endl;</span><br><span class="line"></span><br><span class="line">    //原空间被释放，但是a还是被释放的s[2]空间的别名，如果操作非法的空间，会出错</span><br><span class="line">    //a = &#x27;3&#x27;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="06-vector容器"><a href="#06-vector容器" class="headerlink" title="06.vector容器"></a>06.vector容器</h2><p>1.数据结构:连续存储空间</p>
+<br/>
+
+<p>2.迭代器：随机迭代器</p>
+<p>3.vector容器动态增长原理</p>
+<p>​    1.当存储空不够时，会开辟另一块大的空间，然后把数据拷贝过去，最后在销毁原来的空间</p>
+<p>​    2.申请的空间,会比用户需求大一点</p>
+<p>​    3.重新分配空间，那么原来的迭代器就会失效</p>
+<p>4.常用的api:</p>
+<p>​    1.构造</p>
+<p>​    2.赋值操作    <strong>&#x3D; assign swap</strong></p>
+<p>​    3.大小操作    <strong>size     empty resize capacity reserve</strong></p>
+<p>​    4.数据存取    <strong>at [ ] front back</strong></p>
+<p>​    5.插入和删除    <strong>push_back pop_back erase clear</strong></p>
+<p>5.常用的api中的注意:</p>
+<p>​    resize开辟空间，并初始化。reserve开辟空间，但不初始化.没有初始化的空间不能访问</p>
+<p>6.reserve作用：如果容器要存储大量数据时，要先开辟空间，避免多次申请空间</p>
+<p>7.swap作用:缩小容器的容量</p>
+<h2 id="07-deque容器-双向vector"><a href="#07-deque容器-双向vector" class="headerlink" title="07.deque容器 双向vector"></a>07.deque容器 双向vector</h2><p>1.数据结构:逻辑上是连续的存储空间，实际上的由很多块定量的块空间，通过中控制连接起来</p>
+<p>2.迭代器:随机迭代器</p>
+<p>3.常用的api：</p>
+<p>​    1.构造</p>
+<p>​    2.赋值    <strong>&#x3D; assign swap</strong></p>
+<p>​    3.大小    <strong>size empty resize</strong></p>
+<p>​    4.双端插入和删除操作    <strong>push_back push_front     pop_back pop_front</strong></p>
+<p>​    5.数据存取    <strong>at     [ ] front back</strong></p>
+<pre><code>6.插入和删除     **insert    clear erase**
+</code></pre>
+<h2 id="08-打分案例"><a href="#08-打分案例" class="headerlink" title="08.打分案例"></a>08.打分案例</h2><p>1.目的：5个学生，10个评委，10个评委的分数去掉最高和最低分，取平均分就是学生的分数</p>
+<p>2.思路：</p>
+<p>​    1.抽象学生</p>
+<p>​    2.使用vector容器存储学生</p>
+<p>​    3.把分数放入deque容器，然后对deque容器进行排序，之后删除首尾元素</p>
+<p>3.流程：</p>
+<p>​    1.创建学生</p>
+<p>​    2.评委给学生打分</p>
+<p>​    3.根据学生的分数排名并打印</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br></pre></td><td class="code"><pre><span class="line">#define _CRT_SECURE_NO_WARNINGS</span><br><span class="line">#include&lt;iostream&gt;</span><br><span class="line">#include&lt;vector&gt;</span><br><span class="line">#include&lt;deque&gt;</span><br><span class="line">#include&lt;string&gt;</span><br><span class="line">#include&lt;algorithm&gt;//算法头文件</span><br><span class="line">#include&lt;ctime&gt;</span><br><span class="line">using namespace std;</span><br><span class="line">//目的：5个学生，10个评委，10个评委的分数去掉最高和最低分，取平均分就是学生的分数</span><br><span class="line">//抽象学生</span><br><span class="line">class Student</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    string name;</span><br><span class="line">    int mScore;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">//1.创建学生</span><br><span class="line">void CreateStudent(vector&lt;Student&gt; &amp;vstu)</span><br><span class="line">&#123;</span><br><span class="line">    string setName = &quot;ABCDE&quot;;</span><br><span class="line">    for (int i = 0; i &lt; 5; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        //创建学生</span><br><span class="line">        Student stu;</span><br><span class="line">        stu.name = &quot;学生&quot;;</span><br><span class="line">        stu.name += setName[i];</span><br><span class="line">        stu.mScore = 0;</span><br><span class="line">        vstu.push_back(stu);//把学生放入容器</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">//2.评委给学生打分</span><br><span class="line">void SetScore(vector&lt;Student&gt; &amp;vstu)</span><br><span class="line">&#123;</span><br><span class="line">    srand((unsigned int)time(NULL));</span><br><span class="line">    //遍历学生</span><br><span class="line">    for (vector&lt;Student&gt;::iterator it = vstu.begin(); it != vstu.end(); ++it)</span><br><span class="line">    &#123;</span><br><span class="line">        //保存分数</span><br><span class="line">        deque&lt;int&gt; dScore;</span><br><span class="line">        //评委给学生打分</span><br><span class="line">        for (int i = 0; i &lt; 10; i++)</span><br><span class="line">        &#123;</span><br><span class="line">            int score = rand() % 70 + 30;</span><br><span class="line">            dScore.push_back(score);</span><br><span class="line">        &#125;</span><br><span class="line">        //排序</span><br><span class="line">        sort(dScore.begin(),dScore.end());</span><br><span class="line">        //去掉最高分和最低分</span><br><span class="line">        dScore.pop_back();</span><br><span class="line">        dScore.pop_front();</span><br><span class="line"></span><br><span class="line">        //求总分</span><br><span class="line">        int tota = 0;</span><br><span class="line">        for (deque&lt;int&gt;::iterator sit = dScore.begin(); sit != dScore.end(); ++sit)</span><br><span class="line">        &#123;</span><br><span class="line">            tota += (*sit);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        //求平均分</span><br><span class="line">        int agescore = tota / dScore.size();</span><br><span class="line"></span><br><span class="line">        //平均分存储到对象中</span><br><span class="line">        it-&gt;mScore = agescore;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">//谓词</span><br><span class="line">bool mycomapre(Student &amp;s1, Student &amp;s2)</span><br><span class="line">&#123;</span><br><span class="line">    return s1.mScore &gt; s2.mScore;</span><br><span class="line">&#125;</span><br><span class="line">//3.排名并打印</span><br><span class="line">void ShowStudentScore(vector&lt;Student&gt; &amp;vstu)</span><br><span class="line">&#123;</span><br><span class="line">    //排序算法，mycomapre改变sort的默认规则</span><br><span class="line">    sort(vstu.begin(), vstu.end(), mycomapre);</span><br><span class="line">    for (vector&lt;Student&gt;::iterator it = vstu.begin(); it != vstu.end(); ++it)</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; &quot;Name:&quot; &lt;&lt; it-&gt;name &lt;&lt; &quot; Score:&quot; &lt;&lt; it-&gt;mScore &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">void test()</span><br><span class="line">&#123;</span><br><span class="line">    //存储学生的容器</span><br><span class="line">    vector&lt;Student&gt; vstu;</span><br><span class="line"></span><br><span class="line">    //1.创建学生</span><br><span class="line">    CreateStudent(vstu);</span><br><span class="line">    //2.评委给学生打分</span><br><span class="line">    SetScore(vstu);</span><br><span class="line">    //3.排名并打印</span><br><span class="line">    ShowStudentScore(vstu);</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">    test();</span><br><span class="line">    system(&quot;pause&quot;);</span><br><span class="line">    return EXIT_SUCCESS;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+<div class="article-footer reveal fs14"><section id="license"><div class="header"><span>License</span></div><div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
+</div></section></div>
+
+</article>
+
+<div class="related-wrap reveal" id="read-next"><section class="header cap theme"><span>READ NEXT</span></section><section class="body fs14"><a id="next" href="/2022/04/14/%E6%96%87%E4%BB%B6IO/">C++ 文件IO<span class="note">Older</span></a><div class="line"></div><a id="prev" href="/2022/04/14/STL2/">C++ STL2<span class="note">Newer</span></a></section></div>
+
+
+
+
+
+
+
+
+      
+<footer class="page-footer reveal fs12"><hr><div class="text"><p>All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</p>
+<p>This site was deployed by <a href="http://example.com/">@John Doe</a> using <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.6.1" title="v1.6.1">Stellar</a>.</p>
+</div></footer>
+
+      <div class='float-panel mobile-only blur' style='display:none'>
+  <button type='button' class='sidebar-toggle mobile' onclick='sidebar.toggle()'>
+    <svg class="icon" style="width: 1em; height: 1em;vertical-align: middle;fill: currentColor;overflow: hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="15301"><path d="M566.407 808.3c26.9-0.1 49.3-20.8 51.6-47.6-1.9-27.7-23.9-49.7-51.6-51.6h-412.6c-28.2-1.4-52.6 19.5-55.5 47.6 2.3 26.8 24.6 47.5 51.6 47.6h416.5v4z m309.3-249.9c26.9-0.1 49.3-20.8 51.6-47.6-2.2-26.8-24.6-47.5-51.6-47.6h-721.9c-27.7-2.8-52.5 17.4-55.3 45.1-0.1 0.8-0.1 1.7-0.2 2.5 0.9 27.2 23.6 48.5 50.7 47.6H875.707z m-103.1-245.9c26.9-0.1 49.3-20.8 51.6-47.6-0.4-28.3-23.2-51.1-51.5-51.6h-618.9c-29.5-1.1-54.3 21.9-55.5 51.4v0.2c1.4 27.8 25.2 49.2 53 47.8 0.8 0 1.7-0.1 2.5-0.2h618.8z" p-id="15302"></path><path d="M566.407 808.3c26.9-0.1 49.3-20.8 51.6-47.6-1.9-27.7-23.9-49.7-51.6-51.6h-412.6c-28.2-1.4-52.6 19.5-55.5 47.6 1.9 27.7 23.9 49.7 51.6 51.6h416.5z m309.3-249.9c26.9-0.1 49.3-20.8 51.6-47.6-2.2-26.8-24.6-47.5-51.6-47.6h-721.9c-27.7-2.8-52.5 17.4-55.3 45.1-0.1 0.8-0.1 1.7-0.2 2.5 0.9 27.2 23.6 48.5 50.7 47.6H875.707z m-103.1-245.9c26.9-0.1 49.3-20.8 51.6-47.6-0.4-28.3-23.2-51.1-51.5-51.6h-618.9c-29.5-1.1-54.3 21.9-55.5 51.4v0.2c1.4 27.8 25.2 49.2 53 47.8 0.8 0 1.7-0.1 2.5-0.2h618.8z" p-id="15303"></path></svg>
+  </button>
+</div>
+
+    </div>
+  </div>
+  <div class='scripts'>
+    <script type="text/javascript">
+  stellar = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    loadCSS: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    // 从 butterfly 和 volantis 获得灵感
+    loadScript: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    // https://github.com/jerryc127/hexo-theme-butterfly
+    jQuery: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        stellar.loadScript(stellar.plugins.jQuery).then(fn)
+      } else {
+        fn()
+      }
+    }
+  };
+  stellar.github = 'https://github.com/xaoxuu/hexo-theme-stellar/tree/1.6.1';
+  stellar.config = {
+    date_suffix: {
+      just: 'Just',
+      min: 'minutes ago',
+      hour: 'hours ago',
+      day: 'days ago',
+      month: 'months ago',
+    },
+  };
+
+  // required plugins (only load if needs)
+  stellar.plugins = {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js',
+    sitesjs: '/js/plugins/sites.js',
+    friendsjs: '/js/plugins/friends.js',
+  };
+
+  // optional plugins
+  if ('true' == 'true') {
+    stellar.plugins.lazyload = Object.assign({"enable":true,"js":"https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.3.1/dist/lazyload.min.js","transition":"blur"});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.swiper = Object.assign({"enable":true,"css":"https://unpkg.com/swiper@6/swiper-bundle.min.css","js":"https://unpkg.com/swiper@6/swiper-bundle.min.js"});
+  }
+  if ('' == 'true') {
+    stellar.plugins.scrollreveal = Object.assign({"enable":null,"js":"https://cdn.jsdelivr.net/npm/scrollreveal@4.0.9/dist/scrollreveal.min.js","distance":"8px","duration":500,"interval":100,"scale":1});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.preload = Object.assign({"enable":true,"service":"flying_pages","instant_page":"https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@4.1.2/js/instant_page.js","flying_pages":"https://cdn.jsdelivr.net/gh/gijo-varghese/flying-pages@2.1.2/flying-pages.min.js"});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.fancybox = Object.assign({"enable":true,"js":"https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.umd.js","css":"https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.css","selector":".swiper-slide img"});
+  }
+  if ('false' == 'true') {
+    stellar.plugins.heti = Object.assign({"enable":false,"css":"https://unpkg.com/heti/umd/heti.min.css","js":"https://unpkg.com/heti/umd/heti-addon.min.js"});
+  }
+</script>
+
+<!-- required -->
+
+  
+<script src="/js/main.js" async></script>
+
+
+
+<!-- optional -->
+
+
+
+<!-- inject -->
+
+
+  </div>
+</body>
+</html>
